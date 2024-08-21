@@ -83,6 +83,7 @@ export interface Page {
     };
     [k: string]: unknown;
   } | null;
+  content_html?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -138,6 +139,17 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "QuoteBlock".
+ */
+export interface QuoteBlock {
+  quoteHeader: string;
+  quoteText?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'Quote';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

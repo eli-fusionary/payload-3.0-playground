@@ -1,28 +1,19 @@
 import path from 'path'
+import { buildConfig } from 'payload'
 // import { postgresAdapter } from '@payloadcms/db-postgres'
 import { en } from 'payload/i18n/en'
-import {
-  AlignFeature,
-  BlockquoteFeature,
-  BlocksFeature,
-  BoldFeature,
-  ChecklistFeature,
-  HeadingFeature,
-  IndentFeature,
-  InlineCodeFeature,
-  ItalicFeature,
-  lexicalEditor,
-  LinkFeature,
-  OrderedListFeature,
-  ParagraphFeature,
-  RelationshipFeature,
-  UnorderedListFeature,
-  UploadFeature,
-} from '@payloadcms/richtext-lexical'
-import { mongooseAdapter } from '@payloadcms/db-mongodb'
-import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import { fileURLToPath } from 'url'
+
+import QuoteBlock from '@/app/(payload)/blocks/QuoteBlock'
+import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import {
+  BlocksFeature,
+  FixedToolbarFeature,
+  HTMLConverterFeature,
+  lexicalEditor,
+  lexicalHTML,
+} from '@payloadcms/richtext-lexical'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -53,7 +44,16 @@ export default buildConfig({
         {
           name: 'content',
           type: 'richText',
+          editor: lexicalEditor({
+            features: ({ defaultFeatures }) => [
+              ...defaultFeatures,
+              FixedToolbarFeature(),
+              BlocksFeature({ blocks: [QuoteBlock] }),
+              HTMLConverterFeature({}),
+            ],
+          }),
         },
+        lexicalHTML('content', { name: 'content_html', storeInDB: true }),
       ],
     },
     {
@@ -93,6 +93,11 @@ export default buildConfig({
       email: 'dev@payloadcms.com',
       password: 'test',
       prefillOnly: true,
+    },
+
+    livePreview: {
+      url: 'http://localhost:3000',
+      collections: ['pages'],
     },
   },
   async onInit(payload) {

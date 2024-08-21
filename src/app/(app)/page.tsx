@@ -1,7 +1,10 @@
-import { Badge } from '@/components/Badge'
-import { Background } from '@/components/Background'
-import Link from 'next/link'
 import React from 'react'
+
+import Link from 'next/link'
+
+import { Background } from '@/components/Background'
+import { Badge } from '@/components/Badge'
+import Home from '@/components/Home'
 import config from '@payload-config'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
 
@@ -53,7 +56,9 @@ return <Pages data={data} />
         <p>This is the example in action - here is a list of all page titles:</p>
         <ul>
           {data.docs.map((doc) => (
-            <li key={doc.id}>{doc.title ?? 'No title'}</li>
+            <li key={doc.id}>
+              <Home {...doc} />
+            </li>
           ))}
         </ul>
       </main>
